@@ -8,7 +8,7 @@ var manage = {
 	 * @param {Integer} repairerLimit
 	 * @param {Integer} longRangeHarvesterLimit
 	 **/
-    run : function(builderLimit, gathererLimit, minerLimit, upgraderLimit, repairerLimit, longRangeHarvesterLimit, crossRoomBuilderLimit) {
+    run : function(builderLimit, gathererLimit, minerLimit, upgraderLimit, repairerLimit, longRangeHarvesterLimit, crossRoomBuilderLimit, rangedGuardLimit) {
         var SPAWNER = Game.spawns['Spawner_Main'];
 		var energy = SPAWNER.room.energyCapacityAvailable;
         
@@ -78,6 +78,15 @@ var manage = {
 			}
 		}
 		
+		// RANGED GUARD
+		if (count.rangedGuards.length < rangedGuardLimit) {
+			name = SPAWNER.createRangedGuard(energy);
+			
+			if (name != undefined && !(name < 0)) {
+				manage.spawned(name, "Ranged Guard");
+			}
+		}
+		
 		// LONG RANGE HARVESTER
 		if (count.longRangeHarvesters.length < longRangeHarvesterLimit) {
 			var rooms = {
@@ -124,6 +133,7 @@ var manage = {
 		console.log("Repairers:", count.repairers.length);
 		console.log("Long Range Harvesters:", count.longRangeHarvesters.length);
 		console.log("Cross Room Builders:", count.crossRoomBuilder.length);
+		console.log("Ranged Guards:", count.rangedGuards.length);
 		return;
 	},
 	
@@ -136,6 +146,7 @@ var manage = {
 		count.repairers = manage.listRepairers();
 		count.longRangeHarvesters = manage.listLongRangeHarvesters();
 		count.crossRoomBuilder	  = manage.listCrossRoomBuilders();
+		count.rangedGuards		  = manage.listRangedGuards();
 		return count;
 	},
 	
@@ -157,6 +168,8 @@ var manage = {
 			case 'crossRoomBuilder':
 			case 'crBuilder':
 				return _.filter(Game.creeps, (creep) => creep.memory.role == 'crBuilder');
+			case 'rangedGuards':
+				return _.filter(Game.creeps, (creep) => creep.memory.role == 'rangedGuard');
 		}
 	},
 	
@@ -188,6 +201,10 @@ var manage = {
 		return manage.listAll('crBuilder');
 	},
 	
+	listRangedGuards : function() {
+		return manage.listAll('rangedGuards');
+	},
+	
 	buildersSpeak : function() {
 		manage.listBuilders().forEach(b => b.say('Builder'));
 	},
@@ -214,13 +231,12 @@ var manage = {
 	
 	crossRoomBuildersSpeak : function() {
 		manage.listCrossRoomBuilders().forEach(crb => crb.say('Cross Room Builder'));
+	},
+	
+	rangedGuardsSpeak : function() {
+		manage.listRangedGuards().forEach(rg => rg.say('Ranged Guard'));
 	}
     
 };
-
-// function spawned(name, type) {
-	// console.log("New " + type + ", " + name + " with " + Game.creeps[name].body.length + " parts.");
-	// manage.allCreeps();
-// }
 
 module.exports = manage;
