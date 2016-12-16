@@ -183,7 +183,7 @@ module.exports = function() {
 	}
 	
 	StructureSpawn.prototype.createGuard = function(energy, target, x, y) {
-		var attack = Math.floor(energy * .49 / 80);
+		var attack = Math.floor(energy * .5 / 80);
 		var move = Math.floor(energy * .49 / 50);
 		var tough = Math.floor((energy - (attack * 80 + move * 50)) / 10);
 		var body = [];

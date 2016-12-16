@@ -1,11 +1,20 @@
 module.exports = function() {
 	
+	Creep.prototype.manageState = function() {
+		if (this.memory.working && this.isCollecting()) {
+			this.memory.working = false;
+		}
+		if (!this.memory.working && this.isWorking()) {
+			this.memory.working = true;
+		}
+	}
+	
 	Creep.prototype.isCollecting = function() {
 		return this.carry.energy == 0;
 	}
 	
 	Creep.prototype.isWorking = function() {
-		this.carry.energy == this.carryCapacity;
+		return this.carry.energy == this.carryCapacity;
 	}
 	
 	Creep.prototype.collectDroppedEnergy = function() {
@@ -30,6 +39,28 @@ module.exports = function() {
 		}
 	}
 	
+	Creep.prototype.repairStructures = function() {
+		let targets = _.sortBy(this.room.find(FIND_STRUCTURES, {
+			filter: (structure) => structure.hits < structure.hitsMax && structure.structureType != STRUCTURE_WALL
+		}), t => t.hits / t.hitsMax);
+		if (targets.length > 0) {
+			if (this.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+				this.moveTo(targets[0]);
+			}
+		} else {
+			targets = _.sortBy(this.room.find(FIND_STRUCTURES, {
+				filter: (structure) => structure.structureType == STRUCTURE_WALL && structure.hits < structure.hitsMax
+			}), w => w.hits / w.hitsMax);
+			if (targets.length > 0) {
+				if (this.repair(targets[0]) == ERR_NOT_IN_RANGE) {
+					this.moveTo(targets[0]);
+				}
+			} else {
+				return false;
+			}
+		}
+	}
+	
 	Creep.prototype.storeCollectedEnergy = function() {
 		let targets = this.room.find(FIND_MY_STRUCTURES, {
 			filter: (structure) => {
@@ -40,6 +71,9 @@ module.exports = function() {
 		this.room.find(FIND_MY_STRUCTURES, {
 			filter: (structure) => structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity
 		}).forEach(tower => targets.push(tower));
+		this.room.find(FIND_MY_STRUCTURES, {
+			filter: (structure) => structure.structureType == STRUCTURE_STORAGE && structure.energy < structure.energyCapacity
+		}).forEach(storage => targets.push(storage));
 		if (targets.length > 0) {
 			if (this.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 				this.moveTo(targets[0]);
@@ -50,9 +84,11 @@ module.exports = function() {
 	}
 	
 	Creep.prototype.mineClosestSource = function() {
-		let sources = _.sortBy(this.room.find(FIND_SOURCES_ACTIVE), (source) => this.pos.getRangeTo(source));
-		if (this.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-			this.moveTo(sources[0]);
+		if (!this.collectDroppedEnergy()) {
+			let sources = _.sortBy(this.room.find(FIND_SOURCES_ACTIVE), (source) => this.pos.getRangeTo(source));
+			if (this.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+				this.moveTo(sources[0]);
+			}
 		}
 	}
 	

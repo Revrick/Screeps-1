@@ -35,7 +35,7 @@ var manage = {
                     source1++;
                 }
             });
-            name = SPAWNER.createMiner(count.miners.length == 0 ? 300 : energy, (source0 < source1 ? 'source0' : 'source1'));
+            name = SPAWNER.createMiner(count.miners.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy, (source0 < source1 ? 'source0' : 'source1'));
 			
 			if (name != undefined && !(name < 0)) {
 				manage.spawned(name, "Miner");
@@ -44,7 +44,7 @@ var manage = {
         
 		// GATHERER
         if (count.gatherers.length < gathererLimit) {
-            name = SPAWNER.createGatherer(count.gatherers.length == 0 ? 300 : energy);
+            name = SPAWNER.createGatherer(count.gatherers.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy);
 			
 			if (name != undefined && !(name < 0)) {
 				manage.spawned(name, "Gatherer");
@@ -53,7 +53,7 @@ var manage = {
         
 		// UPGRADER
         if (count.upgraders.length < upgraderLimit) {
-            name = SPAWNER.createUpgrader(count.upgraders.length == 0 ? 300 : energy);
+            name = SPAWNER.createUpgrader(count.upgraders.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy);
 			
 			if (name != undefined && !(name < 0)) {
 				manage.spawned(name, "Upgrader");
@@ -80,7 +80,7 @@ var manage = {
 		
 		// GUARD
 		if (count.guards.length < guardLimit) {
-			name = SPAWNER.createGuard(energy, 'W77S31', 26, 43);
+			name = SPAWNER.createGuard(energy, 'W77S31', 2, 34);
 			
 			if (name != undefined && !(name < 0)) {
 				manage.spawned(name, "Guard");
@@ -99,7 +99,7 @@ var manage = {
 		// LONG RANGE HARVESTER
 		if (count.longRangeHarvesters.length < longRangeHarvesterLimit) {
 			var rooms = {
-				//W77S31: 0,
+				W77S31: 0,
 				W77S33: 0,
 				W78S32: 0
 			};

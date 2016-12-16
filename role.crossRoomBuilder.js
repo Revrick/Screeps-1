@@ -5,9 +5,13 @@ var roleCrossRoomBuilder = {
     /** @paran {Creep} creep **/
     run : function(creep) {
         
+		creep.manageState();
+		
         if (creep.room.name == creep.memory.target) {
-			if (!creep.isCollecting()) {
-				creep.buildConstructionSites();
+			if (creep.memory.working) {
+				if (creep.buildConstructionSites()) {
+					creep.repairStructures();
+				}
 			} else {
 				creep.mineClosestSource();
 			}
