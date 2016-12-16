@@ -1,4 +1,5 @@
 require('prototype.spawn')();
+require('prototype.creep')();
 
 var manage = require('manage');
 
