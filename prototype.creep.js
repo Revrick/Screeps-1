@@ -28,6 +28,20 @@ module.exports = function() {
 		}
 	}
 	
+	Creep.prototype.withdrawFromStorage = function() {
+		let storage = this.room.storage;
+		if (storage != undefined) {
+			if (storage.store[RESOURCE_ENERGY] > 0) {
+				if (this.withdraw(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+					this.moveTo(storage);
+				}
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+	
 	Creep.prototype.buildConstructionSites = function() {
 		let targets = this.room.find(FIND_CONSTRUCTION_SITES);
 		if (targets.length > 0) {
@@ -72,7 +86,7 @@ module.exports = function() {
 			filter: (structure) => structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity
 		}).forEach(tower => targets.push(tower));
 		this.room.find(FIND_MY_STRUCTURES, {
-			filter: (structure) => structure.structureType == STRUCTURE_STORAGE && structure.energy < structure.energyCapacity
+			filter: (structure) => structure.structureType == STRUCTURE_STORAGE && structure.store < structure.storeCapacity
 		}).forEach(storage => targets.push(storage));
 		if (targets.length > 0) {
 			if (this.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

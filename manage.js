@@ -19,109 +19,112 @@ var manage = {
             }
         }
         
-		// RESPAWN CREEPS
-        var count = manage.count();
-		
-		var name = undefined;
-        
-		// MINER
-        if (count.miners.length < minerLimit) {
-            var source0 = 0;
-            var source1 = 0;
-            count.miners.forEach(function(creep) {
-                if (creep.memory.source == 'source0') {
-                    source0++;
-                } else {
-                    source1++;
-                }
-            });
-            name = SPAWNER.createMiner(count.miners.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy, (source0 < source1 ? 'source0' : 'source1'));
+		// Spawner is busy, cannot spawn, so don't check.
+		if (SPAWNER.spawning == null) {
+			// RESPAWN CREEPS
+			var count = manage.count();
 			
-			if (name != undefined && !(name < 0)) {
-				manage.spawned(name, "Miner");
-			}
-        }
-        
-		// GATHERER
-        if (count.gatherers.length < gathererLimit) {
-            name = SPAWNER.createGatherer(count.gatherers.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy);
+			var name = undefined;
 			
-			if (name != undefined && !(name < 0)) {
-				manage.spawned(name, "Gatherer");
-			}
-        }
-        
-		// UPGRADER
-        if (count.upgraders.length < upgraderLimit) {
-            name = SPAWNER.createUpgrader(count.upgraders.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy);
-			
-			if (name != undefined && !(name < 0)) {
-				manage.spawned(name, "Upgrader");
-			}
-        }
-        
-		// BUILDER
-        if (count.builders.length < builderLimit) {
-            name = SPAWNER.createBuilder(energy);
-			
-			if (name != undefined && !(name < 0)) {
-				manage.spawned(name, "Builder");
-			}
-        }
-		
-		// REPAIRER
-		if (count.repairers.length < repairerLimit) {
-			name = SPAWNER.createRepairer(energy);
-			
-			if (name != undefined && !(name < 0)) {
-				manage.spawned(name, "Repairer");
-			}
-		}
-		
-		// GUARD
-		if (count.guards.length < guardLimit) {
-			name = SPAWNER.createGuard(energy, 'W77S31', 2, 34);
-			
-			if (name != undefined && !(name < 0)) {
-				manage.spawned(name, "Guard");
-			}
-		}
-		
-		// RANGED GUARD
-		if (count.rangedGuards.length < rangedGuardLimit) {
-			name = SPAWNER.createRangedGuard(energy, 'W77S32', 22, 1);
-			
-			if (name != undefined && !(name < 0)) {
-				manage.spawned(name, "Ranged Guard");
-			}
-		}
-		
-		// LONG RANGE HARVESTER
-		if (count.longRangeHarvesters.length < longRangeHarvesterLimit) {
-			var rooms = {
-				W77S31: 0,
-				W77S33: 0,
-				W78S32: 0
-			};
-            count.longRangeHarvesters.forEach(function(creep) {
-                for (var key in rooms) {
-					if (creep.memory.target == key) {
-						rooms[key]++;
+			// MINER
+			if (count.miners.length < minerLimit) {
+				var source0 = 0;
+				var source1 = 0;
+				count.miners.forEach(function(creep) {
+					if (creep.memory.source == 'source0') {
+						source0++;
+					} else {
+						source1++;
 					}
+				});
+				name = SPAWNER.createMiner(count.miners.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy, (source0 < source1 ? 'source0' : 'source1'));
+				
+				if (name != undefined && !(name < 0)) {
+					manage.spawned(name, "Miner");
 				}
-            });
-			var target = Object.keys(rooms).sort((a,b) => rooms[a] - rooms[b])[0];
-			
-			name = SPAWNER.createLongRangeHarvester(energy, SPAWNER.room.name, target);
-			
-			if (name != undefined && !(name < 0)) {
-				manage.spawned(name, "Long Range Harvester");
 			}
-		}
-		
-		// CROSS ROOM BUILDER
-		if (count.crossRoomBuilder.length < crossRoomBuilderLimit) {
-            name = SPAWNER.createCrossRoomBuilder(energy, 'W78S32');
+			
+			// GATHERER
+			if (count.gatherers.length < gathererLimit) {
+				name = SPAWNER.createGatherer(count.gatherers.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy);
+				
+				if (name != undefined && !(name < 0)) {
+					manage.spawned(name, "Gatherer");
+				}
+			}
+			
+			// UPGRADER
+			if (count.upgraders.length < upgraderLimit) {
+				name = SPAWNER.createUpgrader(count.upgraders.length == 0 ? (SPAWNER.room.energyAvailable >= 300 ? SPAWNER.room.energyAvailable : 300) : energy);
+				
+				if (name != undefined && !(name < 0)) {
+					manage.spawned(name, "Upgrader");
+				}
+			}
+			
+			// BUILDER
+			if (count.builders.length < builderLimit) {
+				name = SPAWNER.createBuilder(energy);
+				
+				if (name != undefined && !(name < 0)) {
+					manage.spawned(name, "Builder");
+				}
+			}
+			
+			// REPAIRER
+			if (count.repairers.length < repairerLimit) {
+				name = SPAWNER.createRepairer(energy);
+				
+				if (name != undefined && !(name < 0)) {
+					manage.spawned(name, "Repairer");
+				}
+			}
+			
+			// GUARD
+			if (count.guards.length < guardLimit) {
+				name = SPAWNER.createGuard(energy, 'W77S31', 2, 34);
+				
+				if (name != undefined && !(name < 0)) {
+					manage.spawned(name, "Guard");
+				}
+			}
+			
+			// RANGED GUARD
+			if (count.rangedGuards.length < rangedGuardLimit) {
+				name = SPAWNER.createRangedGuard(energy, 'W77S32', 22, 1);
+				
+				if (name != undefined && !(name < 0)) {
+					manage.spawned(name, "Ranged Guard");
+				}
+			}
+			
+			// LONG RANGE HARVESTER
+			if (count.longRangeHarvesters.length < longRangeHarvesterLimit) {
+				var rooms = {
+					W77S31: 0,
+					W77S33: 0,
+					W78S32: 0
+				};
+				count.longRangeHarvesters.forEach(function(creep) {
+					for (var key in rooms) {
+						if (creep.memory.target == key) {
+							rooms[key]++;
+						}
+					}
+				});
+				var target = Object.keys(rooms).sort((a,b) => rooms[a] - rooms[b])[0];
+				
+				name = SPAWNER.createLongRangeHarvester(energy, SPAWNER.room.name, target);
+				
+				if (name != undefined && !(name < 0)) {
+					manage.spawned(name, "Long Range Harvester");
+				}
+			}
+			
+			// CROSS ROOM BUILDER
+			if (count.crossRoomBuilder.length < crossRoomBuilderLimit) {
+				name = SPAWNER.createCrossRoomBuilder(energy, 'W78S32');
+			}
 		}
     },
 	

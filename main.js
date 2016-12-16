@@ -19,10 +19,10 @@ module.exports.loop = function () {
     // console.log(Game.time);
     
     var BUILDER_LIMIT = 2;
-    var GATHERER_LIMIT = 5;
+    var GATHERER_LIMIT = 2;
     var MINER_LIMIT = 2;
-    var UPGRADER_LIMIT = 5;
-	var REPAIRER_LIMIT = 5;
+    var UPGRADER_LIMIT = 2;
+	var REPAIRER_LIMIT = 2;
 	var LONG_RANGE_HARVESTER_LIMIT = 5;
 	var CROSS_ROOM_BUILDER_LIMIT = 1;
 	var GUARD_LIMIT = 2;
