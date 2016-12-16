@@ -143,8 +143,8 @@ module.exports = function() {
 	StructureSpawn.prototype.createRangedGuard = function(energy, target, x, y) {
 		var ranged_attack = Math.floor(energy * .5 / 150);
 		var attack = Math.floor(energy * .25 / 80);
-		var move = Math.floor(energy * .20 / 50);
-		var tough = Math.floor(energy * .05 / 10);
+		var move = Math.floor(energy * .23 / 50);
+		var tough = Math.floor(energy * .02 / 10);
 		var leftoverEnergy = energy - (ranged_attack * 150 + attack * 80 + move * 50 + tough * 10);
 		var body = [];
 		
@@ -180,6 +180,34 @@ module.exports = function() {
 		}
 		
 		return this.createCreep(body, undefined, cMemory);
+	}
+	
+	StructureSpawn.prototype.createGuard = function(energy, target, x, y) {
+		var attack = Math.floor(energy * .49 / 80);
+		var move = Math.floor(energy * .49 / 50);
+		var tough = Math.floor((energy - (attack * 80 + move * 50)) / 10);
+		var body = [];
+		
+		for (var i = 0; i < tough; i++) {
+			body.push(TOUGH);
+		}
+		
+		for (var i = 0; i < attack; i++) {
+			body.push(ATTACK);
+		}
+		
+		for (var i = 0; i < move; i++) {
+			body.push(MOVE);
+		}
+		
+		let cMemory = {role: 'guard'};
+		if (target != undefined) {
+			cMemory.target = target;
+			cMemory.x = x;
+			cMemory.y = y;
+		}
+		
+		return this.createCreep(body, undefined, cMemory)
 	}
 	
 }
