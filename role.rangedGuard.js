@@ -5,7 +5,7 @@ var roleRangedGuard = {
         
 		if (creep.memory.target != undefined) {
 			if (creep.room.name == creep.memory.target) {
-				let roomPos = RoomPosition(creep.memory.x, creep.memory.y, creep.memory.target);
+				let roomPos = Game.rooms[creep.memory.target].getPositionAt(creep.memory.x, creep.memory.y);
 				var hostiles = _.sortBy(creep.room.find(FIND_HOSTILE_CREEPS), h => roomPos.getRangeTo(h));
 				if (hostiles.length > 0) {
 					if (creep.rangedAttack(hostiles[0]) == ERR_NOT_IN_RANGE) {

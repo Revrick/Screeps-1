@@ -142,8 +142,8 @@ module.exports = function() {
 	
 	StructureSpawn.prototype.createRangedGuard = function(energy, target, x, y) {
 		var ranged_attack = Math.floor(energy * .5 / 150);
-		var attack = Math.floor(energy * .3 / 80);
-		var move = Math.floor(energy * .15 / 50);
+		var attack = Math.floor(energy * .25 / 80);
+		var move = Math.floor(energy * .20 / 50);
 		var tough = Math.floor(energy * .05 / 10);
 		var leftoverEnergy = energy - (ranged_attack * 150 + attack * 80 + move * 50 + tough * 10);
 		var body = [];
